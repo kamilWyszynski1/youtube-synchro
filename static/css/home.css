@@ -1,3 +1,9 @@
+html, body{
+   font-family: "Courier New" !important;
+}
+h2{
+    font-weight: bold !important;
+}
 .slidecontainer {
   width: 100%; /* Width of the outside container */
 }
@@ -39,10 +45,30 @@
 .slidecontainer{
   margin-top: 10px;
 }
-.player{
- position: absolute;
-  left: 50%;
-  top: 30%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
+
+.container{
+    margin-top: 10%;
+}
+
+.home-form{
+    width: 60%;
+    margin-left: 20%;
+    margin-top: 20%;
+}
+
+.title{
+    font-size: 32px;
+    font-weight: bolder;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.btn-primary{
+    margin-top: 5px;
+}
+
+#video{
+    height: 315px;
+    width: 560px;
+    background-color: black;
 }

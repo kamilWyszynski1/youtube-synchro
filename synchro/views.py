@@ -1,21 +1,21 @@
-from django.shortcuts import render
-from uuid import UUID
-import uuid
-import json
-from django.conf import settings
-from django.http import HttpResponse
-from django.contrib.sessions.models import Session
+from django.shortcuts import render, redirect
+from django.template import RequestContext
+
 # Create your views here.
 
 
-def home(request):
+def player(request, id):
     request.session['user_id'] = 1
-    return render(request, 'synchro/home.html', context={
-        'seconds' : 0,
-        'session': request.session.get('user_id')
-    })
+    return render(request, 'synchro/player.html')
+
 
 def room(request):
-    return render(request, 'synchro/room.html',{
+    return render(request, 'synchro/room.html', {
         'room_name_json': 'my_room'
     })
+
+def home(request):
+    return render(request, 'synchro/home.html')
+
+def createGroup(request):
+    return redirect('player/%s' % request.POST['groupname'])
