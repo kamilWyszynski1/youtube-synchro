@@ -5,14 +5,16 @@
     <meta charset="UTF-8">
     <title>Player</title>
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <scripit src="https://www.youtube.com/iframe_api"></scripit>
+    <link href="{% static 'css/slider.css' %}">
+    <script src="{% static 'js/bootstrap-slider.js' %}"></script>
 </head>
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-7">
             <div id="video"></div>
 {#            <iframe id="video" width="560" height="315"#}
 {#                    src="https://www.youtube.com/embed/MjLsQNBBBd4?start={{ seconds }}&autoplay=1&rel=0&modestbranding=1&fs=0&showinfo=0&controls=0&cc_load_policy=1&iv_load_policy=3&showsearch=0&enablejsapi=1" frameborder="0"  allowfullscreen></iframe>#}
@@ -25,6 +27,7 @@
             <div class="slidecontainer">
               <input type="range" min="0"  value="0.1" class="slider" id="myRange">
             </div>
+
         </div>
         <div class="col-lg-4">
             <label for="exampleInputPassword1">Paste youtube video url here</label>
@@ -32,10 +35,12 @@
             <button id="url-submit" class="btn btn-primary">Submit</button>
         </div>
     </div>
+    {% for message in messages %}
+        <input id="username" value="{{ message }}" hidden>
+    {% endfor %}
 </div>
 </body>
 <script src="{% static 'js/youtube.js' %}">
 
 </script>
-
 </html>

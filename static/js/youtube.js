@@ -1,9 +1,9 @@
     /////// YOUTUBE API HERE ///////
 let incr = 1;
 
-var tag = document.createElement('script');
+let tag = document.createElement('script');
 tag.src = "//www.youtube.com/player_api";
-var firstScriptTag = document.getElementsByTagName('script')[0];
+let firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 let player;
@@ -31,7 +31,7 @@ function onPlayerReady(event) {
 
   // bind events
     document.getElementById('myRange').max = duration()*10;
-    var playButton = document.getElementById("play-button");
+    let playButton = document.getElementById("play-button");
     playButton.addEventListener("click", function() {
     player.playVideo();
   });
@@ -46,34 +46,48 @@ function onPlayerStateChange(event) {
         incr = 1;
 }
 
-
-    /////// SOCKET HERE ///////
-
-
-var videoSocket = new WebSocket('ws://' + window.location.host + '/ws/video/1/');
-
 function duration() {
     return player.getDuration();
-}
+    }
+    /////// SOCKET HERE ///////
 
-var playButton  = document.getElementById("play-button");
-var pauseButton = document.getElementById("pause-button");
-var synchroButton = document.getElementById("rewind-button");
-var slider = document.getElementById('myRange');
+let href_array = window.location.href.split('/');
+let room_number = href_array[href_array.length-1];
+let videoSocket = new WebSocket('ws://' + window.location.host + '/ws/video/'
+            +room_number+'/');
+
+
+
+// send message when joining a room so roommate will send
+// back you a seconds of video
+
+
+let playButton  = document.getElementById("play-button");
+let pauseButton = document.getElementById("pause-button");
+let synchroButton = document.getElementById("rewind-button");
+let slider = document.getElementById('myRange');
+
+videoSocket.onopen = function(e){
+        videoSocket.send(JSON.stringify({
+        'pause':true,
+        'seconds': -2
+    }));
+};
 
 videoSocket.onmessage = function (e) {
-    var data = JSON.parse(e.data);
-    var pause = data['pause'];
-    var seconds = data['seconds']
+    let data = JSON.parse(e.data);
+    let pause = data['pause'];
+    let seconds = data['seconds']
 
-    if(pause && seconds === -1)
+    console.log(data['users']);
+
+    if(pause && seconds === -1 )
         player.pauseVideo();
 
-    if(!pause && seconds === -1)
+    else if(!pause && seconds === -1)
         player.playVideo();
 
-    if(seconds >= 0){
-        console.log(seconds);
+    else if(seconds >= 0){
         player.seekTo(parseFloat(seconds));
     }
 
@@ -99,7 +113,6 @@ playButton.addEventListener("click", function () {
 });
 
 synchroButton.addEventListener("click", function () {
-    console.log(player.getCurrentTime().toFixed(2));
    videoSocket.send(JSON.stringify({
        'pause': true,
        'seconds': player.getCurrentTime().toFixed(2)
