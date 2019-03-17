@@ -1,6 +1,7 @@
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 import json
+from synchro.models import Connection
 
 
 class ChatConsumer(WebsocketConsumer):
@@ -16,6 +17,7 @@ class ChatConsumer(WebsocketConsumer):
 
     def disconnect(self, close_code):
         # Leave room group
+        Connection.objects.filter(user_id=self.room_name).delete()
         async_to_sync(self.channel_layer.group_discard)(self.room_group_name, self.channel_name)
 
     # Receive message from WebSocket

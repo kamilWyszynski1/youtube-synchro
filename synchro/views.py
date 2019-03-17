@@ -1,12 +1,14 @@
 from django.shortcuts import render, HttpResponseRedirect
-from django.contrib import messages
+from synchro.serializers import ConnectionSerializer
+from synchro.models import Connection
+from rest_framework import viewsets, generics
 
 
 # Create your views here.
 
 
 def player(request, id):
-    return render(request, 'synchro/player.html')
+    return render(request, 'synchro/player.html', {})
 
 
 def room(request):
@@ -18,5 +20,18 @@ def home(request):
 
 
 def createGroup(request):
-    messages.add_message(request, messages.INFO, request.POST['username'])
+    Connection.objects.create(user_id=request.POST['username'], room_id=request.POST['groupname'])
     return HttpResponseRedirect('player/%s' % request.POST['groupname'])
+
+
+class ConnectionViewSet(viewsets.ModelViewSet):
+    queryset = Connection.objects.all()
+    serializer_class = ConnectionSerializer
+
+
+class RoomViewSet(generics.ListAPIView):
+    serializer_class = ConnectionSerializer
+
+    def get_queryset(self):
+        id = self.kwargs['id']
+        return Connection.objects.filter(room_id=id)

@@ -8,10 +8,10 @@
     <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <scripit src="https://www.youtube.com/iframe_api"></scripit>
-    <link href="{% static 'css/slider.css' %}">
-    <script src="{% static 'js/bootstrap-slider.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
+    <script src="{% static 'js/angular.min.js' %}"></script>
 </head>
-<body>
+<body ng-app="youtube_app" ng-controller="PlayerController as vm">
 <div class="container">
     <div class="row">
         <div class="col-lg-7">
@@ -35,9 +35,10 @@
             <button id="url-submit" class="btn btn-primary">Submit</button>
         </div>
     </div>
-    {% for message in messages %}
-        <input id="username" value="{{ message }}" hidden>
-    {% endfor %}
+    <div ng-repeat="user in vm.users">
+        {{ user.user_id }}
+
+    </div>
 </div>
 </body>
 <script src="{% static 'js/youtube.js' %}">

@@ -1,2 +1,1 @@
-bledy w bazie redis
-zastosowac ten sam schemta socketow do filmu
+change way of storing sessions, they seem to overlap

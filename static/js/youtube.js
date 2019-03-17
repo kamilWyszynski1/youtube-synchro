@@ -146,3 +146,19 @@ document.getElementById("url-submit").addEventListener(
     }
 );
 
+let user_arr = [];
+fetch('http://127.0.0.1:8000/connections/123123')
+    .then(response => {
+        return response.json()
+    })
+    .then(data => {
+        for(i=0;i<data.length;i++){
+            user_arr.push(data[i].user_id);
+        }
+        console.log(user_arr);
+    })
+    .catch(err =>{
+
+    });
+
+

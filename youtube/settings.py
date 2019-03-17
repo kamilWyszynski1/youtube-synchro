@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'synchro',
     'channels',
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -87,8 +88,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'youtubesynchro',
-        'USER': 'kamek',
-        'PASSWORD': '',
+        'USER': 'postgres',
+        'PASSWORD': 'kamil9725',
         'HOST': 'localhost',
         'PORT': '5432',
     }
