@@ -1,7 +1,8 @@
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 import json
-from synchro.models import Connection
+
+from synchro.models import User
 
 
 class ChatConsumer(WebsocketConsumer):
@@ -17,8 +18,8 @@ class ChatConsumer(WebsocketConsumer):
 
     def disconnect(self, close_code):
         # Leave room group
-        Connection.objects.filter(user_id=self.room_name).delete()
         async_to_sync(self.channel_layer.group_discard)(self.room_group_name, self.channel_name)
+
 
     # Receive message from WebSocket
     def receive(self, text_data):
@@ -35,6 +36,7 @@ class ChatConsumer(WebsocketConsumer):
         # Send message to WebSocket
         self.send(text_data=json.dumps({'message': message}))
 
+
 class VideoConsumer(WebsocketConsumer):
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['id']
@@ -49,6 +51,10 @@ class VideoConsumer(WebsocketConsumer):
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name, self.channel_name
         )
+        User.objects.filter(
+            user_id=self.scope['session']['username']
+        ).delete()
+
 
     def receive(self, text_data):
         text_data_json = json.loads(text_data)

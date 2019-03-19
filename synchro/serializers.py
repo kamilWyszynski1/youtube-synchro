@@ -1,11 +1,20 @@
-from synchro.models import Connection
+from synchro.models import  Group, User
 from rest_framework import serializers
 
 
-class ConnectionSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Connection
-        lookup_field = 'room_id'
-        fields = ('user_id', 'room_id')
-        extra_kwargs = {'url': {'lookup_field': 'room_id'}}
+class GroupSerializer(serializers.ModelSerializer):
+    users = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field='user_id'
+    )
 
+    class Meta:
+        model = Group
+        fields = ('group_id', 'users')
+
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ('pk', 'user_id', 'group')

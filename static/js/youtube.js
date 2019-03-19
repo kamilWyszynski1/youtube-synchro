@@ -94,7 +94,7 @@ videoSocket.onmessage = function (e) {
 };
 
 videoSocket.onclose = function (e) {
-    console.error('Home socket dead');
+    console.log('websocket dead');
 };
 
 pauseButton.addEventListener("click", function() {

@@ -1,24 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="restApp">
 <head>
     {% load staticfiles %}
     <meta charset="UTF-8">
     <title>Player</title>
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <scripit src="https://www.youtube.com/iframe_api"></scripit>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.7/angular.min.js"></script>
+    <script src="{% static 'ng-app/app.js' %}"></script>
+    <script src="{% static 'ng-app/controller.js' %}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
-    <script src="{% static 'js/angular.min.js' %}"></script>
 </head>
-<body ng-app="youtube_app" ng-controller="PlayerController as vm">
+<body ng-controller="playerController as vm">
 <div class="container">
+
+  <h4>
+      Your name: <b id="username">{{ username }}</b>
+  </h4>
+
     <div class="row">
         <div class="col-lg-7">
             <div id="video"></div>
-{#            <iframe id="video" width="560" height="315"#}
-{#                    src="https://www.youtube.com/embed/MjLsQNBBBd4?start={{ seconds }}&autoplay=1&rel=0&modestbranding=1&fs=0&showinfo=0&controls=0&cc_load_policy=1&iv_load_policy=3&showsearch=0&enablejsapi=1" frameborder="0"  allowfullscreen></iframe>#}
-{#            <br>#}
 
             <br>
             <button id="play-button" class="btn btn-primary">PLAY</button>
@@ -35,10 +38,14 @@
             <button id="url-submit" class="btn btn-primary">Submit</button>
         </div>
     </div>
-    <div ng-repeat="user in vm.users">
-        {{ user.user_id }}
-
+    {% verbatim %}
+    <div class="room_users">
+    <h3>Users in this room:</h3>
+        <li ng-repeat="user in vm.users">
+            {{ user }}
+        </li>
     </div>
+    {% endverbatim %}
 </div>
 </body>
 <script src="{% static 'js/youtube.js' %}">
