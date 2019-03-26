@@ -45,16 +45,32 @@ class VideoConsumer(WebsocketConsumer):
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,self.channel_name)
 
+        try:
+            User.objects.create(
+                user_id=self.scope['session']['username'],
+                group=self.room_name
+            )
+        except:
+            pass
+
         self.accept()
 
     def disconnect(self, code):
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name, {
+                'type': 'chat_message',
+                'pause': False,
+                'seconds': -2
+            }
+        )
+
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name, self.channel_name
         )
+
         User.objects.filter(
             user_id=self.scope['session']['username']
         ).delete()
-
 
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
@@ -73,8 +89,8 @@ class VideoConsumer(WebsocketConsumer):
         pause = event['pause']
         seconds = event['seconds']
 
+        print(seconds, type(seconds))
         self.send(text_data=json.dumps({
             'pause': pause,
             'seconds': seconds
         }))
-

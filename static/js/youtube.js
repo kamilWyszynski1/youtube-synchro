@@ -1,4 +1,4 @@
-    /////// YOUTUBE API HERE ///////
+ /////// YOUTUBE API HERE //////
 let incr = 1;
 
 let tag = document.createElement('script');
@@ -40,7 +40,9 @@ function onPlayerReady(event) {
 function onPlayerStateChange(event) {
     let state = event.target.getPlayerState();
 
-    if(state === 2)
+    if(state === 3)
+        incr = 0;
+    else if(state === 2)
         incr = 0;
     else
         incr = 1;
@@ -77,9 +79,7 @@ videoSocket.onopen = function(e){
 videoSocket.onmessage = function (e) {
     let data = JSON.parse(e.data);
     let pause = data['pause'];
-    let seconds = data['seconds']
-
-    console.log(data['users']);
+    let seconds = data['seconds'];
 
     if(pause && seconds === -1 )
         player.pauseVideo();
@@ -90,15 +90,25 @@ videoSocket.onmessage = function (e) {
     else if(seconds >= 0){
         player.seekTo(parseFloat(seconds));
     }
-
+    else if(seconds === -2){
+        let scope = angular.element(document.querySelectorAll("#controller")).scope();
+            scope.$apply(function () {
+            scope.init();
+        });
+        console.log('dwojeczka');
+    }
 };
 
-videoSocket.onclose = function (e) {
-    console.log('websocket dead');
+videoSocket.onclose =
+    function (e) {
+    videoSocket.send(JSON.stringify({
+        'pause': true,
+        'seconds': -2
+    }));
 };
 
 pauseButton.addEventListener("click", function() {
-
+    incr = 0;
     videoSocket.send(JSON.stringify({
         'pause': true,
         'seconds': -1
@@ -106,6 +116,7 @@ pauseButton.addEventListener("click", function() {
 });
 
 playButton.addEventListener("click", function () {
+    incr = 1;
     videoSocket.send(JSON.stringify({
         'pause': false,
         'seconds': -1
@@ -124,7 +135,6 @@ slider.addEventListener("click", function () {
        'pause': true,
        'seconds': slider.value/10
    }));
-
 });
 
 
@@ -146,19 +156,20 @@ document.getElementById("url-submit").addEventListener(
     }
 );
 
-let user_arr = [];
-fetch('http://127.0.0.1:8000/connections/123123')
-    .then(response => {
-        return response.json()
-    })
-    .then(data => {
-        for(i=0;i<data.length;i++){
-            user_arr.push(data[i].user_id);
+document.getElementById("share").value= window.location.href + '/join';
+
+
+function copy() {
+    let url = document.getElementById("share");
+    url.select();
+    document.execCommand("copy");
+
+    $.notify("URL copied", {
+        allow_dismiss: true,
+        placement: {
+            from: 'bottom',
+            align: 'left'
         }
-        console.log(user_arr);
-    })
-    .catch(err =>{
-
     });
-
+}
 

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Join room</title>
+</head>
+<body>
+     <form class="home-form" action="{% url 'create-group' %}" method="post">
+        {% csrf_token %}
+        <h2>Join room</h2>
+          <div class="form-group">
+            <label for="exampleInputEmail1">User name</label>
+            <input type="text" class="form-control" name="username" aria-describedby="emailHelp" placeholder="Enter username" required>
+            <small id="emailHelp" class="form-text text-muted">Your name will be shown in group chat</small>
+          </div>
+
+          <div class="form-group">
+            <label for="url-input">Group name</label>
+            <input id="url-input" type="text" class="form-control" name="groupname" value="{{ group_id }}" readonly>
+          </div>
+
+          <button id="url-submit" type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</body>
+</html>
